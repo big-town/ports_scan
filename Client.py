@@ -25,11 +25,11 @@ def createClientSocket(port, timeout, host='127.0.0.1'):
     finally:
         sock.close()
 
-def scanRange(port_begin, port_end, host):
+def scanRange(port_begin, port_end, host, client_timeout):
     threads = list()
 
     for i in range(port_begin, port_end):
-        x = threading.Thread(target=createClientSocket, args=(i, 5, host,))
+        x = threading.Thread(target=createClientSocket, args=(i, client_timeout, host,))
         threads.append(x)
         x.start()
 

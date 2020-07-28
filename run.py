@@ -27,6 +27,7 @@ srv_timeout: int = 5
 host: str = '127.0.0.1'
 user = 'root'
 password = ''
+client_timeout: int = 5
 
 for o, a in opts:
     if o in ('-b', '--port_begin'): port_begin = int(a)
@@ -34,6 +35,7 @@ for o, a in opts:
     if o in ('-p', '--ssh_port'): port = int(a)
     if o in ('-z', '--chunk_size'): chunk = int(a)
     if o in ('-s', '--server_timeout'): srv_timeout = int(a)
+    if o in ('-c', '--client_timeout'): client_timeout = int(a)
     if o in ('-i', '--ip_address'): host = a
     if o in ('-u', '--user'): user = a
     if o in ('-w', '--password'): password = a
@@ -61,7 +63,7 @@ for i in range(0, full):
     stdin, stdout, stderr = ssh_client.exec_command(
         "python3 /tmp/Server.py {0} {1} {2} &".format(chunk_begin, chunk_end, srv_timeout))
     time.sleep(3);
-    FL = Client.scanRange(chunk_begin, chunk_end)
+    FL = Client.scanRange(chunk_begin, chunk_end, host, client_timeout)
 
 if tale > 0:
     chunk_begin = chunk_end if full > 0 else  port_begin
@@ -70,7 +72,7 @@ if tale > 0:
     stdin, stdout, stderr = ssh_client.exec_command(
         "python3 /tmp/Server.py {0} {1} {2} &".format(chunk_begin, chunk_end, srv_timeout))
     time.sleep(3);
-    FL = Client.scanRange(chunk_begin, chunk_end, host)
+    FL = Client.scanRange(chunk_begin, chunk_end, host, client_timeout)
 
 
 F = open("openports.txt", "a")
